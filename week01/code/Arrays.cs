@@ -3,6 +3,8 @@ public static class Arrays
      /// <summary>
      /// I have created a class called arrays,
      /// i used 7 as my starting point with 5 as the multiples
+     /// i aslo used 1.5 as my starting point with 10 as the multiples
+     /// i also used -2 as my starting point with 10 as the multiples
      /// i created my function to be called Run()
      /// This function will run the tests for the MultiplesOf 7,5,starting from 7, and terminating at 5th multiples. 
      /// also used 1.5 and 10, and also -2, and 10 respectively.
@@ -39,10 +41,11 @@ public static class Arrays
     }
 
     ///<sumamry>
-    /// i created the result array
-    /// used the loop to determine the start and the end of the array result created
-    /// i filled each index with the next multiple
-    /// i then return the filled array  which is result
+    /// I created an empty array of doubles with the given length.
+    /// used the loop from 0 to (length - 1)
+    /// In each iteration,I multiplied the base number by (i + 1) to get the next multiple.
+    /// i  Stored the result in the corresponding index of the array.
+    /// After the loop ends, return the filled array.
     /// </summary>
     public static double[] MultiplesOf(double number, int length)
     {
@@ -59,11 +62,13 @@ public static class Arrays
     
     
     ///<summary>
-    /// created variable count
-    /// used modulo(%) to handle cases where amount > length i.e rotating by 18 on the  list of 9
-    ///  used range to get the last amount element
-    /// remove the e,lement from the end
-    /// insert them at the beginning
+    /// Get the count of items in the list.
+    ///  Use modulo (%) to reduce amount in case it's larger than the list size.
+    /// If amount is 0, do nothing (no rotation needed).
+    /// Use GetRange to copy the last 'amount' elements into a temporary list.
+    /// Remove those elements from the end of the original list.
+    /// Insert the temporary list elements at the beginning of the original list.
+   
 
 
     public static void RotateListRight(List<int> data, int amount)
