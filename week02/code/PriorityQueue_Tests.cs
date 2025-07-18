@@ -4,7 +4,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 [TestClass]
 public class PriorityQueueTests
-{
+{   
+
+
+    [TestMethod]
+    // Scenario: Enqueue three items with different priorities and dequeue them.
+    // Expected Result: Items should be dequeued in descending priority order: High, Medium, Low.
+    // Defect(s) Found: None. Confirms proper priority-based ordering.
     public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
@@ -30,6 +36,11 @@ public class PriorityQueueTests
         Assert.AreEqual("Third", priorityQueue.Dequeue());
     }
     
+
+    [TestMethod]
+    // Scenario: Attempt to dequeue from an empty queue.
+    // Expected Result: Should throw InvalidOperationException.
+    // Defect(s) Found: None. Confirms error handling for empty queue access.
     public void TestPriorityQueue_Empty()
     {
         var priorityQueue = new PriorityQueue();
