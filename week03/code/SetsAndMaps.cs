@@ -22,7 +22,23 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+         var result = new List<string>();
+        var wordSet = new HashSet<string>(words);
+        var seen = new HashSet<string>();
+
+        foreach (var word in words)
+        {
+            if (word[0] == word[1]) continue; // skip words like 'aa'
+            var reversed = new string(new[] { word[1], word[0] });
+
+            if (wordSet.Contains(reversed) && !seen.Contains(reversed))
+            {
+                result.Add($"{word} & {reversed}");
+                seen.Add(word);
+            }
+        }
+
+        return result.ToArray();
     }
 
     /// <summary>
@@ -42,6 +58,13 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
+             if (fields.Length < 4) continue;
+            var degree = fields[3].Trim();
+
+            if (degrees.ContainsKey(degree))
+                degrees[degree]++;
+            else
+                degrees[degree] = 1;
             // TODO Problem 2 - ADD YOUR CODE HERE
         }
 
@@ -67,7 +90,29 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+         word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+
+        if (word1.Length != word2.Length) return false;
+
+        var counts = new Dictionary<char, int>();
+
+        foreach (char c in word1)
+        {
+            if (counts.ContainsKey(c))
+                counts[c]++;
+            else
+                counts[c] = 1;
+        }
+
+        foreach (char c in word2)
+        {
+            if (!counts.ContainsKey(c)) return false;
+            counts[c]--;
+            if (counts[c] < 0) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -87,20 +132,47 @@ public static class SetsAndMaps
     public static string[] EarthquakeDailySummary()
     {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+        try
+       {
         using var client = new HttpClient();
         using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
         using var jsonStream = client.Send(getRequestMessage).Content.ReadAsStream();
         using var reader = new StreamReader(jsonStream);
         var json = reader.ReadToEnd();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO Problem 5:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
-        // 3. Return an array of these string descriptions.
-        return [];
+        var result = new List<string>();
+
+        if (featureCollection?.Features != null)
+        {
+            foreach (var feature in featureCollection.Features)
+            {
+                var place = feature.Properties?.Place;
+                var mag = feature.Properties?.Mag;
+                if (!string.IsNullOrWhiteSpace(place) && mag.HasValue)
+                { 
+                   result.Add($"m{place} - Mag {mag.Value:F1} ");
+                    
+                }
+               
+            }
+        }
+
+        if (result.Count == 0)
+        {
+            return new[] { "Unknown Location: 0.0 magnitude" };
+            
+        }
+        
+                
+        return result.ToArray();
+        }
+        catch (Exception ex)
+        {
+            return new[] { $"Unknown Location: 0.0 magnitude (error: {ex.Message})" };
+        }
     }
 }
