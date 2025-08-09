@@ -11,6 +11,9 @@ public class Node
 
     public void Insert(int value)
     {
+         if (value == Data)
+        return; 
+         // No duplicates allowed
         // TODO Start Problem 1
 
         if (value < Data)
@@ -33,13 +36,31 @@ public class Node
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
-        return false;
+        if (value == Data)
+            return true;
+        if (value < Data)
+            return Left != null && Left.Contains(value);
+        else
+            return Right != null && Right.Contains(value);
     }
+        // TODO Start Problem 2
+    private void TraverseBackward(Node? node, List<int> values)
+{
+    if (node is not null)
+    {
+        TraverseBackward(node.Right, values);
+        values.Add(node.Data);
+        TraverseBackward(node.Left, values);
+    }
+}
+
 
     public int GetHeight()
     {
+        int leftHeight = Left?.GetHeight() ?? 0;
+        int rightHeight = Right?.GetHeight() ?? 0;
+        return 1 + Math.Max(leftHeight, rightHeight);
         // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        // Replace this line with the correct return statement(s)
     }
 }
